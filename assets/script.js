@@ -17,11 +17,44 @@ weatherForm.addEventListener('submit', async function(event) {
         }
         const data = await response.json();
         displayWeather(data);
-        display5day(data);
+        citySearch(city);
+        saveToLocal(city);
     } catch (error) {
         console.error('There has been a problem with your fetch operation:', error);
     }
 });
+
+function citySearch(city) {
+    const searchHistory = document.getElementById('citySearch');
+    const cityItem = document.createElement('li');
+    const cityLink = document.createElement('a');
+    cityItem.classList.add('list-group-item');
+    cityLink.href = '#'
+    cityItem.textContent = city;
+    cityLink.addEventListener('click', function (event) {
+        event.preventDefault();
+        current(city);
+    });
+    searchHistory.appendChild(cityItem);
+    cityItem.appendChild(cityLink)
+}
+
+function saveToLocal(city) {
+    const cities = JSON.parse(localStorage.getItem('cities')) || [];
+    if (!cities.includes(city)) {
+        cities.push(city);
+        localStorage.setItem('cities', JSON.stringify(cities));
+    }
+}
+
+function loadCities() {
+    const cities = JSON.parse(localStorage.getItem('cities')) || [];
+    cities.forEach(function(city) {
+        citySearch(city);
+    });
+}
+
+document.addEventListener('DOMContentLoaded', loadCities);
 
 function displayWeather(data) {
     weatherDataDiv.innerHTML = `
@@ -32,42 +65,4 @@ function displayWeather(data) {
         <img src ="https://openweathermap.org/img/wn/${data.weather[0].icon}.png" alt=${data.weather[0].description}"</p>
     `;
     console.log(data);
-}
-
-function display5day(data) {
-    foreCastDiv.innerHTML =  `
-        <h3>Weather in ${data.name}:</h3>
-        <p>Temperature: ${data.main.temp}°F</p>
-        <p>Humidity: ${data.main.humidity}</p>
-        <p>Wind: ${data.wind.speed}MPH</p>
-        <img src ="https://openweathermap.org/img/wn/${data.weather[0].icon}.png" alt=${data.weather[0].description}"</p>
-        `;
-    }
-
-//     try {
-//         const response = await fetch(url);
-//         if (!response.ok) {
-//             throw new Error('Network response was not ok ' + response.statusText);
-//         }
-//         const data = await response.json();
-//         displayWeather(data);
-//     } catch (error) {
-//         console.error('There has been a problem with your fetch operation:', error);
-//     }
-// });
-
-
-// function displayWeather(data) {
-//     const weatherDataDiv = document.getElementById('weatherData');
-   
-//     `;
-// }
-
-// function display5day(data) {
-//     const weather5day = document.getElementById('fiveDay');
-//     weather5day.innerHTML = `
-//         <h3>5 Day Forecast:</h3>
-//         <p>Temperature: ${data.main.temp}°C</p>
-//         <p>Weather: ${data.weather[0].description}</p>
-//     `;
-// 
+};
