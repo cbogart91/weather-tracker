@@ -43,7 +43,8 @@ form button:hover {
 }
 
 /* Weather Data Styles */
-#weatherData {
+#weatherData,
+#foreCast {
     background-color: white;
     padding: 20px;
     border-radius: 4px;
@@ -51,10 +52,12 @@ form button:hover {
     margin-top: 20px;
 }
 
-#weatherData h3 {
+#weatherData,
+#foreCast h3 {
     margin-top: 0;
 }
 
-#weatherData p {
+#weatherData,
+#foreCast p {
     margin: 5px 0;
 }
